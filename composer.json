@@ -1,0 +1,16 @@
+{
+    "name": "ab/api_client",
+    "description": "AccountBox API Client",
+    "autoload": {
+        "psr-4": {
+            "ABAPI\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Milan",
+            "email": "igrok5554545@gmail.com"
+        }
+    ],
+    "require": {}
+}
