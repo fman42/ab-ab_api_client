@@ -20,11 +20,8 @@ class AB
         ];
     }
 
-    public function get(string $endpoint)
+    public function list()
     {
-        if (!array_key_exists($endpoint, $this->collectionEndpoint))
-            return null;
-
-        return $this->collectionEndpoint[$endpoint];
+        return $this->collectionEndpoint['list'];
     }
 }

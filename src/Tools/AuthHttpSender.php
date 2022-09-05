@@ -4,48 +4,34 @@ namespace ABAPI\Tools;
 
 use ABAPI\Clients\AuthClient;
 use ABAPI\Schemes\{HttpRequest, APIResponse};
+use GuzzleHttp\Client;
 
 class AuthHttpSender
 {
     private $client;
 
+    private $httpClient;
+
     public function __construct(AuthClient $client)
     {
         $this->client = $client;
-    }
-
-    public function sendPutRequest(HttpRequest $request)
-    {
-        
-    }
-
-    public function sendPostRequest(HttpRequest $request)
-    {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, "{$this->client->getBaseUri()}{$request->getUrl()}");
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Authorization: Bearer'.$this->client->getToken()
+        $this->httpClient = new Client([
+            'base_uri' => $this->client->getBaseUri(),
+            'headers' => [
+                'Authorization' => 'Bearer '.$client->getToken()
+            ]
         ]);
+    }
 
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $request->getArrayParams());
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 1);
-
-        $response = curl_exec($curl);
-        $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $body = substr($response, $header_size);
-        $headers = substr($response, 0, $header_size);
-
-        curl_close($curl);
-
+    public function sendRequest(HttpRequest $request, string $typeRequest, string $body = 'json') {
+        $response = $this->httpClient->request($typeRequest, $request->getUrl(), [$body => $request->getArrayParams()]);
+        
         $res = new APIResponse();
         $res->result = true;
-        $res->data = json_decode($body);
-        $res->http_code = $http_code;
+        $res->data = json_decode((string) $response->getBody());
+        $res->http_code = $response->getStatusCode();
 
-        if ($http_code !== 200 && $http_code !== 201) {
+        if ($res->http_code !== 200 && $res->http_code !== 201) {
             $res->result = false;
         }
 
