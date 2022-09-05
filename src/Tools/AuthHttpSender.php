@@ -23,6 +23,13 @@ class AuthHttpSender
         ]);
     }
 
+    /**
+     * Отправить HTTP-запрос к API
+     * 
+     * @param HttpRequest экземпляр объекта HTTP-запроса
+     * @param string $typeRequest тип запроса
+     * @param string $body тип тела запроса
+     */
     public function sendRequest(HttpRequest $request, string $typeRequest, string $body = 'json') {
         $response = $this->httpClient->request($typeRequest, $request->getUrl(), [$body => $request->getArrayParams()]);
         

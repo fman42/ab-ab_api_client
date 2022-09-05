@@ -16,8 +16,12 @@ class ListEndpoint
     }
 
     /**
-     * Create a mailing list
+     * Создать рассылку
      *
+     * @param string $name название рассылки
+     * @param integer $messages_count_per_account количество сообщений на 1 аккаунт
+     * @param integer $messages_delay_in_seconds задержка между отправкой в секундах
+     * @param string $text текст рассылки
      * @return APIResponse
      */
     public function createList(string $name, int $messages_count_per_account, int $messages_delay_in_seconds, string $text)
@@ -32,8 +36,9 @@ class ListEndpoint
     }
 
     /**
-     * Get the mailing list by id
+     * Получить рассылку по ID
      * 
+     * @param integer $id ID рассылки в AccountBox
      * @return APIResponse
      */
     public function getList(int $id)
@@ -43,7 +48,11 @@ class ListEndpoint
     }
 
     /**
-     * Get the status of message to phone in list
+     * Получить статус сообщения в рассылке по номеру телефона 
+     * 
+     * @param integer $list_id ID рассылки в AccountBox
+     * @param string $phone номер телефона
+     * @return APIResponse
      */
     public function getPhoneStatus(int $list_id, string $phone)
     {
@@ -57,6 +66,8 @@ class ListEndpoint
     /**
      * Update list status
      * 
+     * @param integer list_id ID рассылки в AccountBox
+     * @param string $status статус рассылки
      * @return APIResponse
      */
     public function updateListStatus(int $list_id, string $status)
@@ -69,8 +80,10 @@ class ListEndpoint
     }
 
     /**
-     * Upload phones to list
+     * Загрузить файл номеров в рассылку
      * 
+     * @param integer list_id ID рассылки в AccountBox
+     * @param resource $phonesTxt поток файла с номерами
      * @return APIResponse
      */
     public function uploadPhones(int $list_id, $phonesTxt)
