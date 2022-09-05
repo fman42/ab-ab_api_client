@@ -20,12 +20,13 @@ class ListEndpoint
      *
      * @return APIResponse
      */
-    public function createList(string $name, int $messages_count_per_account, int $messages_delay_in_seconds)
+    public function createList(string $name, int $messages_count_per_account, int $messages_delay_in_seconds, string $text)
     {
         $request = new HttpRequest('list', [
             'name' => $name,
             'messages_count_per_account' => $messages_count_per_account,
-            'messages_delay' => $messages_delay_in_seconds
+            'messages_delay' => $messages_delay_in_seconds,
+            'text' => $text
         ]);
         return $this->httpSender->sendRequest($request, 'POST');
     }
