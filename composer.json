@@ -1,5 +1,5 @@
 {
-    "name": "ab/api_client",
+    "name": "accountbox/api_client",
     "description": "AccountBox API Client",
     "autoload": {
         "psr-4": {
