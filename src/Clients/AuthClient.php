@@ -14,7 +14,7 @@ class AuthClient extends Client
      * @param string $token API-токен
      * @param string $baseUri базовый адрес API
      */
-    public function __construct(string $token, string $baseUri = 'http://go.accountbox.ru/api/v1/')
+    public function __construct(string $token, string $baseUri = 'https://go.accountbox.ru/api/v1/')
     {
         $this->token = $token;
         $this->baseUri = $baseUri;
