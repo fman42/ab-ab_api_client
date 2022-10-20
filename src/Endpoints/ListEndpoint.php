@@ -3,11 +3,14 @@
 namespace ABAPI\Endpoints;
 
 use ABAPI\Clients\AuthClient;
-use ABAPI\Schemes\{HttpRequest, APIResponse};
+use ABAPI\Schemes\{ABList, HttpRequest, APIResponse};
 use ABAPI\Tools\AuthHttpSender;
+use ABAPI\Traits\ListEndpointTrait;
 
 class ListEndpoint
 {
+    use ListEndpointTrait;
+
     private $httpSender;
 
     public function __construct(AuthClient $client)
@@ -18,20 +21,12 @@ class ListEndpoint
     /**
      * Создать рассылку
      *
-     * @param string $name название рассылки
-     * @param integer $messages_count_per_account количество сообщений на 1 аккаунт
-     * @param integer $messages_delay_in_seconds задержка между отправкой в секундах
-     * @param string $text текст рассылки
+     * @param ABList экземпляр AB-рассылки
      * @return APIResponse
      */
-    public function createList(string $name, int $messages_count_per_account, int $messages_delay_in_seconds, string $text)
+    public function createList(ABList $list)
     {
-        $request = new HttpRequest('list', [
-            'name' => $name,
-            'messages_count_per_account' => $messages_count_per_account,
-            'messages_delay' => $messages_delay_in_seconds,
-            'text' => $text
-        ]);
+        $request = new HttpRequest('list', $list->toArray());
         return $this->httpSender->sendRequest($request, 'POST');
     }
 
@@ -64,7 +59,20 @@ class ListEndpoint
     }
 
     /**
-     * Update list status
+     * Обновить дедлайн у рассылки
+     * 
+     * @param itneger list_ID ID рассылки в AccountBox
+     * @param string $deadline новый дедлайн
+     * @return APIResponse
+     */
+    public function updateListDeadline(int $list_id, string $deadline)
+    {
+        $request = $this->makeUpdateListTargetFieldRequest($list_id, 'deadline', $deadline);
+        return $this->httpSender->sendRequest($request, 'PUT');
+    }
+
+    /**
+     * Обновить статус рассылки
      * 
      * @param integer list_id ID рассылки в AccountBox
      * @param string $status статус рассылки
@@ -72,10 +80,7 @@ class ListEndpoint
      */
     public function updateListStatus(int $list_id, string $status)
     {
-        $request = new HttpRequest('list', [
-            'list_id' => $list_id,
-            'status' => $status
-        ]);
+        $request = $this->makeUpdateListTargetFieldRequest($list_id, 'status', $status);
         return $this->httpSender->sendRequest($request, 'PUT');
     }
 
