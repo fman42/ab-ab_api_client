@@ -6,13 +6,13 @@ use ABAPI\Tools\SchemesConverter;
 
 class ABList extends SchemesConverter
 {
-    public string $name = '';
+    public $name = '';
 
-    public int $messages_count_per_account = 0;
+    public $messages_count_per_account = 0;
 
-    public int $messages_delay = 0;
+    public $messages_delay = 0;
 
-    public string $text = '';
+    public $text = '';
 
-    public string $deadline = '';
+    public $deadline = '';
 }
