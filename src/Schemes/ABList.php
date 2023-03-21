@@ -30,4 +30,9 @@ class ABList extends SchemesConverter
      * @var string $name
      */
     public $deadline = '';
+
+    /**
+     * @var string $image
+     */
+    public $image = null;
 }

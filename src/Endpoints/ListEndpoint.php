@@ -11,8 +11,16 @@ class ListEndpoint
 {
     use ListEndpointTrait;
 
+    /**
+     * @var AuthHttpSender $httpSender
+     */
     private $httpSender;
 
+    /**
+     * @param AuthClient $client
+     * 
+     * @return void
+     */
     public function __construct(AuthClient $client)
     {
         $this->httpSender = new AuthHttpSender($client);
@@ -26,8 +34,16 @@ class ListEndpoint
      */
     public function createList(ABList $list)
     {
-        $request = new HttpRequest('list', $list->toArray());
-        return $this->httpSender->sendRequest($request, 'POST');
+        $params = [];
+        foreach ($list->toArray() as $index => $param) {
+            $params[] = [
+                'name' => $index,
+                'contents' => $param
+            ];
+        }
+
+        $request = new HttpRequest('list', $params);
+        return $this->httpSender->sendRequest($request, 'POST', 'multipart');
     }
 
     /**
