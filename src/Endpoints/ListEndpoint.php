@@ -101,6 +101,28 @@ class ListEndpoint
     }
 
     /**
+     * Обновить изображение у рассылки
+     * 
+     * @param integer $list_id ID рассылки в AccountBox
+     * @param resource $imageContent изображение
+     * @return APIResponse
+     */
+    public function updateImage(int $list_id, $imageContent)
+    {
+        $request = new HttpRequest('list', [
+            [
+                'name' => 'list_id',
+                'contents' => $list_id
+            ],
+            [
+                'name' => 'image',
+                'contents' => $imageContent
+            ]
+        ]);
+        return $this->httpSender->sendRequest($request, 'PUT', 'multipart');
+    }
+
+    /**
      * Загрузить файл номеров в рассылку
      * 
      * @param integer list_id ID рассылки в AccountBox

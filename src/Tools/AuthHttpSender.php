@@ -8,10 +8,19 @@ use GuzzleHttp\Client;
 
 class AuthHttpSender
 {
+    /**
+     * @var AuthClient
+     */
     private $client;
 
+    /**
+     * @var Client
+     */
     private $httpClient;
 
+    /**
+     * @param AuthClient $client
+     */
     public function __construct(AuthClient $client)
     {
         $this->client = $client;
@@ -29,9 +38,16 @@ class AuthHttpSender
      * @param HttpRequest экземпляр объекта HTTP-запроса
      * @param string $typeRequest тип запроса
      * @param string $body тип тела запроса
+     * @return APIResponse
      */
     public function sendRequest(HttpRequest $request, string $typeRequest, string $body = 'json') {
-        $response = $this->httpClient->request($typeRequest, $request->getUrl(), [$body => $request->getArrayParams()]);
+        $url = $request->getUrl();
+        if ($typeRequest === 'PUT' && $body === 'multipart') {
+            $typeRequest = 'POST';
+            $url = $url . "?_method=PUT";
+        }
+
+        $response = $this->httpClient->request($typeRequest, $url, [$body => $request->getArrayParams()]);
         
         $res = new APIResponse();
         $res->result = true;
