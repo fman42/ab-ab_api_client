@@ -126,10 +126,10 @@ class ListEndpoint
      * Загрузить файл номеров в рассылку
      * 
      * @param integer list_id ID рассылки в AccountBox
-     * @param resource $phonesTxt поток файла с номерами
+     * @param string $phonesTxt поток файла с номерами
      * @return APIResponse
      */
-    public function uploadPhones(int $list_id, $phonesTxt)
+    public function uploadPhones(int $list_id, string $phonesTxt)
     {
         $request = new HttpRequest('list/phones', [
             [
